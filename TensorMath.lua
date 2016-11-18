@@ -61,7 +61,7 @@ static const void* torch_istensorarray(lua_State *L, int idx)
 
   lua_checkstack(L, 3);
   lua_rawgeti(L, idx, 1);
-  tensor_idx = lua_gettop(L);  
+  tensor_idx = lua_gettop(L);
   tname = (torch_istensortype(L, luaT_typename(L, -1)));
   lua_remove(L, tensor_idx);
   return tname;
@@ -976,6 +976,16 @@ static void THTensor_random1__(THTensor *self, THGenerator *gen, long b)
    end
 
    if Tensor == 'FloatTensor' or Tensor == 'DoubleTensor' then
+
+      wrap("snapd",
+          cname("snapd"),
+          {{name=Tensor, default=true, returned=true, method={default='nil'}},
+           {name=Tensor, method={default=1}},
+           {name=real},
+           {name=real},
+           {name=real},
+           {name=real},
+           {name=real}})
 
       wrap("mean",
            cname("meanall"),

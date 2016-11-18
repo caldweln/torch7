@@ -2407,6 +2407,22 @@ void THTensor_(randn)(THTensor *r_, THGenerator *_generator, THLongStorage *size
   THTensor_(normal)(r_, _generator, 0, 1);
 }
 
+void THTensor_(snapd)(THTensor *r_, THTensor *t, real min_threshold, real min_value, real max_threshold, real max_value, real default_value)
+{
+  THTensor_(resizeAs)(r_, t);
+  if (THTensor_(isContiguous)(r_) && THTensor_(isContiguous)(t) && THTensor_(nElement)(r_) == THTensor_(nElement)(t)) {
+      real *tp = THTensor_(data)(t);
+      real *rp = THTensor_(data)(r_);
+      long sz = THTensor_(nElement)(t);
+      long i;
+      #pragma omp parallel for if(sz > TH_OMP_OVERHEAD_THRESHOLD) private(i)
+      for (i=0; i<sz; i++)
+          if ( tp[i] < min_threshold ) rp[i] = min_value;
+          else if ( tp[i] > max_threshold ) rp[i] = max_value;
+          else rp[i] = default_value;
+  }
+}
+
 void THTensor_(histc)(THTensor *hist, THTensor *tensor, long nbins, real minvalue, real maxvalue)
 {
   THTensor *clone;

@@ -170,6 +170,7 @@ TH_API void THTensor_(logspace)(THTensor *r_, real a, real b, long n);
 TH_API void THTensor_(rand)(THTensor *r_, THGenerator *_generator, THLongStorage *size);
 TH_API void THTensor_(randn)(THTensor *r_, THGenerator *_generator, THLongStorage *size);
 
+TH_API void THTensor_(snapd)(THTensor *r_, THTensor *t, real min_threshold, real min_value, real max_threshold, real max_value, real default_value);
 #endif
 
 #if defined(TH_REAL_IS_BYTE)
